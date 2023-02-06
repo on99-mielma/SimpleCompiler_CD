@@ -332,12 +332,14 @@ class SyncTable:
 
     def closure(self, itemSet: ItemSet):
         iteml = itemSet.itemList
-        for iitem in range(len(iteml)):
-            temp: Item = iteml[iitem]
+        initi = 0
+        thelen = len(iteml)
+        while initi < thelen:
+            temp: Item = iteml[initi]
             if temp.index == len(temp.p.right) - 1:
                 mayLeft = temp.p.right[temp.index]
                 liftMpList = self._production.specmpList(mayLeft)
-                if len(liftMpList) > 0:
+                if liftMpList is not None:
                     for pa in liftMpList:
                         item2: Item = Item(p=pa, index=0, forward=temp.forward)
                         if iteml.count(item2) == 0:
@@ -345,13 +347,15 @@ class SyncTable:
             elif temp.index < len(temp.p.right) - 1:
                 mayLeft2 = temp.p.right[temp.index]
                 leftMplist = self._production.specmpList(mayLeft2)
-                if len(leftMplist > 0):
+                if leftMplist is not None:
                     secondStr = temp.p.right[temp.index + 1]
                     for pa2 in leftMplist:
                         item3: Item = Item(p=pa2)
                         item3.forward = self._production.firstSet.get(secondStr, None)
                         if iteml.count(item3) == 0:
                             iteml.append(item3)
+            initi+=1
+            thelen = len(iteml)
         return itemSet
 
     def searchForward(self, itemSet: ItemSet):
