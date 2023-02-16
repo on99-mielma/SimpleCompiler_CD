@@ -56,7 +56,7 @@ class Production(object):
         return self._mpList
 
     def specmpList(self, wordstr):
-        return self._mpList.get(wordstr,None)
+        return self._mpList.get(wordstr, None)
 
     def genNonTerminalTerminal(self):
         for pagtt in self._productionList:
@@ -73,7 +73,7 @@ class Production(object):
     def genFirstSet(self):
         for wordgfs in self._terminal:
             self.getFirstData(wordgfs)
-        for wordgfs0 in self._terminal:
+        for wordgfs0 in self._nonTerminal:
             self.getFirstData(wordgfs0)
 
     def getFirstData(self, word: str):
@@ -83,18 +83,20 @@ class Production(object):
         :return:
         """
         d = FirstSetData()
-        if word in self._firstSet:
+        if self._firstSet.get(word, None) is not None:
             return self._firstSet[word]
+        # if word in self._firstSet:
+        #     return self._firstSet[word]
         self._firstSet[word] = d
         if word in self._terminal:
             d.add(word)
             d.endToken = False
         else:
-            canGetEnd = True
-            for pagfd in self._mpList[str]:
+            canGetEnd = False
+            for pagfd in self._mpList[word]:
                 tempRight = pagfd.right
                 if len(tempRight) == 0:
-                    canGetEnd = False
+                    canGetEnd = True
                 else:
                     for tempStrR in tempRight:
                         if tempStrR in self._terminal:
@@ -182,7 +184,7 @@ class FirstSetData(object):
         if isinstance(thing, str):
             self._data.add(thing)
         elif isinstance(thing, set):
-            self._data.intersection_update(thing)
+            self._data.update(thing)
 
     def remove(self, word):
         self._data.discard(word)

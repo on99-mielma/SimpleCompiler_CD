@@ -18,18 +18,24 @@ class AnalysisList:
         self._fileReader = None
         self._configPath = configPath
         try:
-            with open(configPath, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-            self._production = Production.Production(config)
+            with open(configPath, 'r', encoding='utf-8') as ff:
+                fconfig = json.load(ff)
+            self._production = Production.Production(fconfig)
         except FileNotFoundError:
-            print('无法打开指定的文件!')
+            print('无法打开指定的文件!AL')
         except LookupError:
-            print('指定了未知的编码!')
+            print(LookupError.with_traceback())
+            print('指定了未知的编码!AL')
         except UnicodeDecodeError:
-            print('读取文件时解码错误!')
+            print('读取文件时解码错误!AL')
         finally:
-            f.close()
+            ff.close()
         self._syncTable = SyncTable.SyncTable(production=self._production)
+
+
+    @property
+    def production(self):
+        return self._production
 
     def printItemSetList(self):
         print(self._syncTable.itemSetList)
@@ -56,7 +62,7 @@ class AnalysisList:
 
 
 if __name__ == '__main__':
-    l = Lexer.Lexer("../lexer/config.json", "../parser/test.txt")
+    l = Lexer.Lexer("../lexer/config.json", "../lexer/test.txt")
     l.printTokens()
     a = AnalysisList("../parser/config.json")
     print(a.production)
@@ -64,3 +70,7 @@ if __name__ == '__main__':
     a.printActionGotoTable()
     analyseOk = a.analyse(l)
     a.printAnalysisTable()
+
+    """
+    ItemSet (45-56) disappear  去解析为什么46不同即可
+    """

@@ -326,9 +326,13 @@ class SyncTable:
         startItem: ItemSet = ItemSet()
         self._itemSetList.append(startItem)
         startItem.add(Item(p=startProduction))
-        for i in range(len(self._itemSetList)):
+        i = 0
+        istlen = len(self._itemSetList)
+        while i < istlen:
             self._itemSetList[i] = self.closure(self._itemSetList[i])
             self._itemSetList[i] = self.searchForward(self._itemSetList[i])
+            i += 1
+            istlen = len(self._itemSetList)
 
     def closure(self, itemSet: ItemSet):
         iteml = itemSet.itemList
@@ -354,7 +358,7 @@ class SyncTable:
                         item3.forward = self._production.firstSet.get(secondStr, None)
                         if iteml.count(item3) == 0:
                             iteml.append(item3)
-            initi+=1
+            initi += 1
             thelen = len(iteml)
         return itemSet
 
@@ -369,8 +373,6 @@ class SyncTable:
                 if sMap.get(tempStr, None) is not None:
                     itemSet2 = sMap.get(tempStr)
                     itemSet2.itemList.append(Item(temp.p, temp.index + 1, temp.forward))
-                    sMap[tempStr] = itemSet2
-                    keys.append(tempStr)
                 else:
                     itemSet2 = ItemSet()
                     itemSet2.itemList.append(Item(temp.p, temp.index + 1, temp.forward))
@@ -394,6 +396,5 @@ class SyncTable:
     def isConflict(self, ist: ItemSet) -> int:
         for i in range(len(self._itemSetList)):
             if ist.__eq__(self._itemSetList[i]):
-                print("我相等喔!")
                 return i
         return -1
