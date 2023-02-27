@@ -5,8 +5,8 @@
 # @File : AnalysisList.py
 import json
 
-from parser import Production
-from parser import SyncTable
+import Production
+import SyncTable
 from utils.file import FileReader
 from lexer import Lexer
 from utils.exception.parser import GrammarError
@@ -72,5 +72,5 @@ if __name__ == '__main__':
     a.printAnalysisTable()
 
     """
-    ItemSet (45-56) disappear  去解析为什么46不同即可
+    ItemSet (45-56) disappear  去解析为什么46不同即可 fix!: __eq__错误
     """

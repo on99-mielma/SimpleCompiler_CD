@@ -3,8 +3,8 @@
 # @Author: Reborn
 # @Project: SimpleCompilerCD
 # @File : SyncTable.py
-from parser import Production
-from parser import SyncTreeNode
+import Production
+import SyncTreeNode
 from lexer import Lexer
 from utils.exception.parser import ParserError
 from utils.exception.parser import GrammarError
@@ -95,7 +95,7 @@ class ItemSet:
             return False
         if self._itemList.__eq__(o._itemList):
             return True
-        if len(self._itemList) != len(self._itemList):
+        if len(self._itemList) != len(o._itemList):
             return False
         # w = [True for t in o._itemList if o._itemList.count(t) <= self._itemList.count(t)]
         w = []
