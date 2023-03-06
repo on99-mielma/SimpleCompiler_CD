@@ -13,6 +13,10 @@ class Lexer(object):
 
     @property
     def ti(self):
+        """
+        生成时间！
+        :return: Check Tokenizer
+        """
         return self._ti
 
     def getTokens(self):

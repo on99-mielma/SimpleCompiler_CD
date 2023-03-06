@@ -214,7 +214,6 @@ class SyncTable:
         return self._analysisTable
 
     def syncTokenList(self, lexer: Lexer.Lexer, parserError: ParserError.ParserError) -> bool:
-        try:
             state = []
             symbol = []
             syncTreeNodes = []
@@ -273,8 +272,6 @@ class SyncTable:
                 return True
             parserError.checkGrammar(self._agList[state[-1]].getKeys(), None)
             return False
-        except GrammarError.GrammarError:
-            print("文法出错")
 
     def addStateAndSymbol(self, state, symbol, val):
         self._analysisTable.append("%-100s\t%-100s\t%s\n" % (state, symbol, val))
@@ -292,15 +289,15 @@ class SyncTable:
                 symbol.pop()
             if len(syncTreeNodes) > 0:
                 tempList.append(syncTreeNodes.pop())
-            tempList.reverse()
-            endStr = pAtom.left
-            index = self._agList[state[-1]].get(endStr)
-            state.append(index)
-            symbol.append(endStr)
-            tempSyncTreeNode = SyncTreeNode.SyncTreeNode(endStr, tempList, token)
-            for t in tempList:
-                t.father = tempSyncTreeNode
-            syncTreeNodes.append(tempSyncTreeNode)
+        tempList.reverse()
+        endStr = pAtom.left
+        index = self._agList[state[-1]].get(endStr)
+        state.append(index)
+        symbol.append(endStr)
+        tempSyncTreeNode = SyncTreeNode.SyncTreeNode(endStr, tempList, token)
+        for t in tempList:
+            t.father = tempSyncTreeNode
+        syncTreeNodes.append(tempSyncTreeNode)
         return state, symbol, syncTreeNodes
 
     def genActionGotoList(self):

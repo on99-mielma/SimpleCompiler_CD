@@ -7,7 +7,7 @@ from lexer import Token
 
 
 class SyncTreeNode:
-    __cnt = 0
+    __cnt = 1 # default 0 -> 1
 
     def __init__(self, val: str = None, child: list = None, token: Token.Token = None):
         self._val = val

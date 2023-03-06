@@ -32,7 +32,6 @@ class AnalysisList:
             ff.close()
         self._syncTable = SyncTable.SyncTable(production=self._production)
 
-
     @property
     def production(self):
         return self._production
@@ -57,7 +56,7 @@ class AnalysisList:
         try:
             self._fileReader = FileReader.FileReader(lexer.filename)
         except GrammarError.GrammarError:
-            print("文法分析错误")
+            raise GrammarError.GrammarError
         return self._syncTable.syncTokenList(lexer, ParserError.ParserError(self._fileReader))
 
 

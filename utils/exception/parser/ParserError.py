@@ -40,3 +40,8 @@ class ParserError:
                 if codeRow < codeSize:
                     print("err: %s" % self._fileReader.userowInd(codeRow))
                 raise GrammarError.GrammarError(keys, t)
+
+
+if __name__ == '__main__':
+    u = ParserError()
+    u.checkGrammar()
