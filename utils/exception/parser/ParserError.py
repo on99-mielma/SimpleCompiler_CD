@@ -21,7 +21,7 @@ class ParserError:
         else:
             codeSize = len(self._fileReader.readRow)
             if t is None:
-                for i in max(codeSize - 2, 0):
+                for i in range(max(codeSize - 2, 0)):
                     print(self._fileReader.userowInd(i))
                 print("ˇ")
                 print()
@@ -31,14 +31,21 @@ class ParserError:
                 codeCol = t.col
                 if codeRow == 1:
                     strfr = self._fileReader.userowInd(0)
-                    print(strfr + "ˇ")
+                    # print(strfr + "ˇ")
+                    for i in range(len(strfr)):
+                        if i == codeCol - 1:
+                            print('ˇ', end='')
+                        print(strfr[i], end='')
                 else:
-                    print("err: %s" % self._fileReader.userowInd(codeRow - 2))
+                    print("0err: %s" % self._fileReader.userowInd(codeRow - 2))
                     strn1 = self._fileReader.userowInd(codeRow - 1)
-                    print(strn1 + "ˇ")
+                    for i in range(len(strn1)):
+                        if i == codeCol - 1:
+                            print('ˇ', end='')
+                        print(strn1[i], end='')
                 print()
                 if codeRow < codeSize:
-                    print("err: %s" % self._fileReader.userowInd(codeRow))
+                    print("1err: %s" % self._fileReader.userowInd(codeRow))
                 raise GrammarError.GrammarError(keys, t)
 
 

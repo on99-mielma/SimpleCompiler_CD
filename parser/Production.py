@@ -59,10 +59,14 @@ class Production(object):
         return self._mpList.get(wordstr, None)
 
     def genNonTerminalTerminal(self):
+        """
+
+        :return: 生成终结符和非终结符的相关列表并构造索引
+        """
         for pagtt in self._productionList:
             self._nonTerminal.add(pagtt.left)
             self._terminal = self._terminal | set(pagtt.right)
-        self._terminal = self._terminal - self._nonTerminal
+        self._terminal = self._terminal - self._nonTerminal  # 除去终结符列表中的非终结符
         for strnt in self._nonTerminal:
             tempList = []
             for pagtt1 in self._productionList:
@@ -88,10 +92,10 @@ class Production(object):
         # if word in self._firstSet:
         #     return self._firstSet[word]
         self._firstSet[word] = d
-        if word in self._terminal:
+        if word in self._terminal:  # 终结符处理
             d.add(word)
             d.endToken = False
-        else:
+        else:  # 非终结符处理
             canGetEnd = False
             for pagfd in self._mpList[word]:
                 tempRight = pagfd.right
@@ -99,7 +103,7 @@ class Production(object):
                     canGetEnd = True
                 else:
                     for tempStrR in tempRight:
-                        if tempStrR in self._terminal:
+                        if tempStrR in self._terminal:  # 如果是终结符则添加并结束
                             d.add(tempStrR)
                             break
                         else:

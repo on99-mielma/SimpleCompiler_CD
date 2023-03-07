@@ -145,6 +145,11 @@ class ActionGoto:
         del self._op[key]
 
     def putAll(self, shiftItem):
+        """
+        将shiftItem放入op中 采用更新策略而非替换策略
+        :param shiftItem:
+        :return:
+        """
         self._op.update(shiftItem)
 
     def __str__(self) -> str:
@@ -162,27 +167,33 @@ class SyncTable:
         :param START_OF_GRAMMAR: 文法产生式的开始符号 必须在文法中定义 START_OF_GRAMMAR 的增广文法
         """
         self._START_OF_GRAMMAR = START_OF_GRAMMAR
+        """
+        生成的项目集族 ItemSet相关
+        """
         self._itemSetList = []
         """
-        生成的项目集族
+        生成的项目集族 ActionGoto相关
         """
         self._agList = []
         """
-        生成的项目集族
+        传递的产生式类
         """
         self._production = production
         """
-        传递的产生式类
+        符号栈 / 状态栈 分析表
         """
         self._analysisTable = []
         """
-                符号栈 / 状态栈 分析表
+        生成抽象语法树  
         """
         self._syncTreeNode: SyncTreeNode.SyncTreeNode = None
         """
-                生成抽象语法树
+        生成 DFA 项目集族
         """
         self.genItemSetList()
+        """
+        利用 项目集族 生成 action goto表
+        """
         self.genActionGotoList()
 
     @property
@@ -214,67 +225,67 @@ class SyncTable:
         return self._analysisTable
 
     def syncTokenList(self, lexer: Lexer.Lexer, parserError: ParserError.ParserError) -> bool:
-            state = []
-            symbol = []
-            syncTreeNodes = []
-            tokens = lexer.getTokens()
-            state.append(0)
-            tokenInd = 0
-            while tokenInd >= 0 and tokenInd < len(tokens):
-                t: Token.Token = tokens[tokenInd]
-                if len(state) == 0:
-                    parserError.checkGrammar(None, t)
-                    return False
-                index = state[-1]
-                actionGoto = self._agList[index]
-                val = ""
-                if t.kind == TokenType.TokenType.ID.name:
-                    val = "ID"
-                elif t.kind == TokenType.TokenType.CONST.name:
-                    val = "CONTANT"
-                else:
-                    val = t.val
-                self.addStateAndSymbol(state, symbol, val)
-                o = actionGoto.get(val)
-                if o is None:
-                    o = actionGoto.get(None)
-                if isinstance(o, int):
-                    state.append(int(o))
-                    symbol.append(val)
-                    syncTreeNodes.append(SyncTreeNode.SyncTreeNode(val=val, token=t))
-                elif isinstance(o, Production.ProductionAtom):
-                    state, symbol, syncTreeNodes = self.reduceToken(state, symbol, syncTreeNodes, o)
-                    tokenInd -= 1
-                else:
-                    parserError.checkGrammar(actionGoto.getKeys(), t)
-                    return False
-                tokenInd += 1
+        state = []
+        symbol = []
+        syncTreeNodes = []
+        tokens = lexer.getTokens()
+        state.append(0)
+        tokenInd = 0
+        while tokenInd >= 0 and tokenInd < len(tokens):
+            t: Token.Token = tokens[tokenInd]
+            if len(state) == 0:
+                parserError.checkGrammar(None, t)
+                return False
+            index = state[-1]
+            actionGoto = self._agList[index]
+            val = ""
+            if t.kind == TokenType.TokenType.ID.name:
+                val = "ID"
+            elif t.kind == TokenType.TokenType.CONST.name:
+                val = "CONSTANT"
+            else:
+                val = t.val
+            self.addStateAndSymbol(state, symbol, val)
+            o = actionGoto.get(val)
+            if o is None:
+                o = actionGoto.get(None)
+            if isinstance(o, int):
+                state.append(int(o))
+                symbol.append(val)
+                syncTreeNodes.append(SyncTreeNode.SyncTreeNode(val=val, token=t))
+            elif isinstance(o, Production.ProductionAtom):
+                state, symbol, syncTreeNodes = self.reduceToken(state, symbol, syncTreeNodes, o)
+                tokenInd -= 1
+            else:
+                parserError.checkGrammar(actionGoto.getKeys(), t)
+                return False
+            tokenInd += 1
 
-            while not len(symbol) == 1 and self._START_OF_GRAMMAR == symbol[-1]:
-                self.addStateAndSymbol(state, symbol, None)
-                if len(state) == 0:
-                    parserError.checkGrammar(None, None)
-                    return False
-                index2 = state[-1]
-                actionGoto2 = self._agList[index2]
-                o2 = actionGoto2.get(None)
-                if o2 is None or isinstance(o2, int):
-                    parserError.checkGrammar(actionGoto2.getKeys(), None)
-                    return False
-                else:
-                    state, symbol, syncTreeNodes = self.reduceToken(state, symbol, syncTreeNodes, o2)
+        while not len(symbol) == 1 or not self._START_OF_GRAMMAR == symbol[-1]:
             self.addStateAndSymbol(state, symbol, None)
-            if len(symbol) == 1 and self._START_OF_GRAMMAR == symbol[-1]:
-                if len(syncTreeNodes) > 0:
-                    self._syncTreeNode = syncTreeNodes[-1]
-                else:
-                    self._syncTreeNode = None
-                return True
-            parserError.checkGrammar(self._agList[state[-1]].getKeys(), None)
-            return False
+            if len(state) == 0:
+                parserError.checkGrammar(None, None)
+                return False
+            index2 = state[-1]
+            actionGoto2 = self._agList[index2]
+            o2 = actionGoto2.get(None)
+            if o2 is None or isinstance(o2, int):
+                parserError.checkGrammar(actionGoto2.getKeys(), None)
+                return False
+            else:
+                state, symbol, syncTreeNodes = self.reduceToken(state, symbol, syncTreeNodes, o2)
+        self.addStateAndSymbol(state, symbol, None)
+        if len(symbol) == 1 and self._START_OF_GRAMMAR == symbol[-1]:
+            if len(syncTreeNodes) > 0:
+                self._syncTreeNode = syncTreeNodes[-1]
+            else:
+                self._syncTreeNode = None
+            return True
+        parserError.checkGrammar(self._agList[state[-1]].getKeys(), None)
+        return False
 
     def addStateAndSymbol(self, state, symbol, val):
-        self._analysisTable.append("%-100s\t%-100s\t%s\n" % (state, symbol, val))
+        self._analysisTable.append("%-100s\t%-100s\t%s" % (state, symbol, val))
 
     def reduceToken(self, state: list, symbol: list, syncTreeNodes: list, pAtom: Production.ProductionAtom):
         tempList = []
@@ -291,7 +302,11 @@ class SyncTable:
                 tempList.append(syncTreeNodes.pop())
         tempList.reverse()
         endStr = pAtom.left
-        index = self._agList[state[-1]].get(endStr)
+        tindex = self._agList[state[-1]].get(endStr)
+        if tindex is None:
+            index = None
+        else:
+            index = int(tindex)
         state.append(index)
         symbol.append(endStr)
         tempSyncTreeNode = SyncTreeNode.SyncTreeNode(endStr, tempList, token)
@@ -316,18 +331,18 @@ class SyncTable:
 
     def genItemSetList(self):
         startProduction: Production.ProductionAtom
-        for ipa in self._production.productionList:
+        for ipa in self._production.productionList:  # 找到第一条产生式
             if self._START_OF_GRAMMAR == ipa.left:
                 startProduction = ipa
                 break
-        startItem: ItemSet = ItemSet()
+        startItem: ItemSet = ItemSet()  # 初始化项目集族
         self._itemSetList.append(startItem)
         startItem.add(Item(p=startProduction))
         i = 0
         istlen = len(self._itemSetList)
         while i < istlen:
-            self._itemSetList[i] = self.closure(self._itemSetList[i])
-            self._itemSetList[i] = self.searchForward(self._itemSetList[i])
+            self._itemSetList[i] = self.closure(self._itemSetList[i])  # 算闭包
+            self._itemSetList[i] = self.searchForward(self._itemSetList[i])  # 向前搜索
             i += 1
             istlen = len(self._itemSetList)
 

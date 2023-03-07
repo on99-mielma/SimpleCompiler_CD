@@ -43,7 +43,10 @@ class AnalysisList:
         print(self._syncTable.agList)
 
     def printAnalysisTable(self):
-        print(self._syncTable.analysisTable)
+        print('\nAnalysisTable Print Start !\n')
+        for u in self._syncTable.analysisTable:
+            print(u)
+        print('\nAnalysisTable Print End !\n')
 
     def getTreeNode(self):
         return self._syncTable.syncTreeNode

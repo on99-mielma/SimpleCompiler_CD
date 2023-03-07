@@ -4,13 +4,12 @@
  */
 
 function int test(int a,double b){
-    //<=a;
     double ccc = 1.1;
     double ccc2 = 1.1E+3.1;
     var ccc3 = 1.1-3.8i;
     var ccc4 = 1.1-3.8+4.5;
     print(123);
-    print("我不管我最棒");
+    print("我不管我最棒000");
     return "我可以的"+ ++a++;
 }
 
@@ -25,7 +24,6 @@ class HHLNB{
         int b = 14;
         double c = a + b * 2.4 + 1.2 - 1.2E+12;
         int i;
-        ++i;
         if(a<=b || b>c && a==c){
             print("哈哈哈\n");
             print('a');
@@ -50,6 +48,6 @@ function void main(){
     var ccc3 = 1.1-3.8i;
     var ccc4 = 1.1-3.8+4.5;
     print(123);
-    print("我不管我最棒");
+    print("我不管我最棒111");
     return "我可以的"+ ++a;
 }
