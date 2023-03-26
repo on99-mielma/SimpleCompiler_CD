@@ -4,7 +4,7 @@
 # @Project: SimpleCompilerCD
 # @File : ParserError.py
 from utils.file import FileReader
-from lexer import Token
+from lexerO import Token
 from utils.exception.parser import GrammarError
 
 

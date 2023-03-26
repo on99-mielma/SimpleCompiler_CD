@@ -1,5 +1,5 @@
 import json
-from lexer import TokenType
+from lexerO import TokenType
 import regex as re
 
 
@@ -70,7 +70,7 @@ class JudgeType(object):
 
 
 def main():
-    with open('../lexer/config.json', 'r', encoding='utf-8') as f:
+    with open('/config.json', 'r', encoding='utf-8') as f:
         config = json.load(f)
     jt = JudgeType(config)
     print('*' * 64)

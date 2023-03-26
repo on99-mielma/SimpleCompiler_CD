@@ -3,13 +3,13 @@
 # @Author: Reborn
 # @Project: SimpleCompilerCD
 # @File : SyncTable.py
-import Production
-import SyncTreeNode
-from lexer import Lexer
+from parserO import Production
+from parserO import SyncTreeNode
+from lexerO import Lexer
 from utils.exception.parser import ParserError
 from utils.exception.parser import GrammarError
-from lexer import Token
-from lexer import TokenType
+from lexerO import Token
+from lexerO import TokenType
 
 
 class Item:

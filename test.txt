@@ -1,0 +1,35 @@
+class TestClass{
+    public int a = 1;
+    private double d = 2.0;
+    protected bool pd = false;//?
+    /*
+    ???
+    */
+
+    void main(){
+    print(123);
+    print("gogogogogogo");
+    double u = 1.2E+12;
+    double t = u + 2 * a / d;
+    var testI = 5.64+2.3i;
+    for( int i = 0 ; i < 99 ; i++){
+           print(i);
+    }
+    if( u == t){
+        print("IMPROSIABLE");
+    }
+    else{
+        print("GOOD");
+    }
+    return a;
+
+    }
+}
+
+function int test2(){
+    char c = 1;
+    while(c <= 125){
+        c += 1;
+    }
+    return c;
+}

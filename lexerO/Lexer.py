@@ -1,4 +1,4 @@
-from lexer import Tokenizer
+from lexerO import Tokenizer
 
 
 class Lexer(object):
@@ -32,5 +32,5 @@ class Lexer(object):
 
 
 if __name__ == '__main__':
-    l = Lexer("../lexer/config.json", "../lexer/test.txt")
+    l = Lexer("../lexerO/config.json", "/test.txt")
     l.printTokens()

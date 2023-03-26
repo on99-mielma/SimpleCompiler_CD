@@ -212,7 +212,7 @@ class FirstSetData(object):
 
 
 if __name__ == '__main__':
-    with open("../parser/config.json", "r", encoding='utf-8') as f:
+    with open("/config.json", "r", encoding='utf-8') as f:
         config = json.load(f)
     pp = Production(config)
     # print(type(pp.productionList[2].left))

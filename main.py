@@ -1,16 +1,26 @@
-# This is a sample Python script.
+import sys
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print('当前PYTHON版本为 {} '.format(sys.version))
+    if sys.version_info.minor < 10:
+        print("您使用的python版本似乎并不符合要求 (要求python >= 3.10)")
+        exit(1)
+    from lexerO import Lexer
+    from parserO import AnalysisList
+
+    lexer = Lexer.Lexer("lexerO/config.json", "test.txt")
+    lexer.printTokens()
+    print()
+    print('=*' * 100)
+    print()
+    ana = AnalysisList.AnalysisList("parserO/config.json")
+    print(ana.production)
+    # print('[*]-' * 100)
+    # print(ana.production.nonTerminal)
+    # print(ana.production.terminal)
+    # print('[*]-' * 100)
+    ana.printItemSetList()
+    ana.printActionGotoTable()
+    anaCheck = ana.analyse(lexer=lexer)
+    ana.printAnalysisTable()

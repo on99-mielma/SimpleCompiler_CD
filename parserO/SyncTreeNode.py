@@ -3,7 +3,7 @@
 # @Author: Reborn
 # @Project: SimpleCompilerCD
 # @File : SyncTreeNode.py
-from lexer import Token
+from lexerO import Token
 
 
 class SyncTreeNode:

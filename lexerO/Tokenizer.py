@@ -1,9 +1,9 @@
 import regex as re
 import json
-from lexer import JudgeType
+from lexerO import JudgeType
 from utils.file import FileReader
-from lexer import Token
-from lexer import TokenType
+from lexerO import Token
+from lexerO import TokenType
 from utils.exception.lexer import TokenException
 
 
@@ -160,7 +160,7 @@ class Tokenizer(object):
 
 
 if __name__ == '__main__':
-    tn = Tokenizer("../lexer/config.json", "../lexer/test.txt")
+    tn = Tokenizer("../lexerO/config.json", "/test.txt")
     print(len(tn.tokens))
     for i in tn.tokens:
         print(i)

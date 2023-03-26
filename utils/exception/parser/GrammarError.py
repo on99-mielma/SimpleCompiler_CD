@@ -3,7 +3,7 @@
 # @Author: Reborn
 # @Project: SimpleCompilerCD
 # @File : GrammarError.py
-from lexer import Token
+from lexerO import Token
 
 
 class GrammarError(Exception):

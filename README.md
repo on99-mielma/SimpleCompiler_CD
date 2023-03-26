@@ -1,3 +1,4 @@
-第一部分写好了
+# NEED: PYTHON_VERSION >= 3.10
 
-第二部分也写完了
+## USE: Please Check main.py
+

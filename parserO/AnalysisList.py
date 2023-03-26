@@ -5,10 +5,10 @@
 # @File : AnalysisList.py
 import json
 
-import Production
-import SyncTable
+from parserO import Production
+from parserO import SyncTable
 from utils.file import FileReader
-from lexer import Lexer
+from lexerO import Lexer
 from utils.exception.parser import GrammarError
 from utils.exception.parser import ParserError
 
@@ -64,9 +64,9 @@ class AnalysisList:
 
 
 if __name__ == '__main__':
-    l = Lexer.Lexer("../lexer/config.json", "../lexer/test.txt")
+    l = Lexer.Lexer("../lexerO/config.json", "../lexerO/test.txt")
     l.printTokens()
-    a = AnalysisList("../parser/config.json")
+    a = AnalysisList("../parserO/config.json")
     print(a.production)
     a.printItemSetList()
     a.printActionGotoTable()

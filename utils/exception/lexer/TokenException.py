@@ -1,4 +1,4 @@
-from lexer import Token
+from lexerO import Token
 
 
 class TokenException(Exception):

@@ -74,7 +74,7 @@ class FileReader(object):
 
 
 if __name__ == '__main__':
-    fr = FileReader(filename="../../lexer/test.txt")
+    fr = FileReader(filename="../../lexerO/test.txt")
     # fr.readFile2Row()
     # print(fr.userowInd(5))
     # ut = fr.nextRow()
